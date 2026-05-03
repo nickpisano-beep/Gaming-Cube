@@ -973,6 +973,42 @@ class DBRomsHandler(DBBaseHandler):
         return session.query(Rom).filter_by(id=id).one()
 
     @begin_session
+    def get_roms_without_metadata(
+        self,
+        session: Session = None,  # type: ignore
+    ) -> Sequence[Rom]:
+        """Return ROMs where all three primary metadata IDs and metadata_checked_at are NULL."""
+        return (
+            session.scalars(
+                select(Rom).where(
+                    and_(
+                        Rom.igdb_id.is_(None),
+                        Rom.ss_id.is_(None),
+                        Rom.moby_id.is_(None),
+                        Rom.metadata_checked_at.is_(None),
+                    )
+                )
+            )
+            .all()
+        )
+
+    @begin_session
+    def mark_metadata_checked(
+        self,
+        id: int,
+        session: Session = None,  # type: ignore
+    ) -> None:
+        """Set metadata_checked_at = now() to prevent re-querying unmatched ROMs."""
+        from datetime import timezone
+
+        session.execute(
+            update(Rom)
+            .where(Rom.id == id)
+            .values(metadata_checked_at=datetime.now(timezone.utc))
+            .execution_options(synchronize_session="evaluate")
+        )
+
+    @begin_session
     def delete_rom(
         self,
         id: int,

@@ -211,6 +211,13 @@ SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC_CRON: Final[str] = _get_env(
     "SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC_CRON",
     "0 4 * * *",  # At 4:00 AM every day
 )
+ENABLE_SCHEDULED_METADATA_WATCHER: Final[bool] = safe_str_to_bool(
+    _get_env("ENABLE_SCHEDULED_METADATA_WATCHER")
+)
+SCHEDULED_METADATA_WATCHER_CRON: Final[str] = _get_env(
+    "SCHEDULED_METADATA_WATCHER_CRON",
+    "0 * * * *",  # Every hour
+)
 
 # SYNC
 SYNC_BASE_PATH: Final[str] = _get_env("SYNC_BASE_PATH", f"{ROMM_BASE_PATH}/sync")

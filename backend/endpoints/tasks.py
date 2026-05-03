@@ -38,6 +38,7 @@ from tasks.manual.cleanup_missing_roms import cleanup_missing_roms_task
 from tasks.manual.cleanup_orphaned_resources import cleanup_orphaned_resources_task
 from tasks.manual.sync_folder_scan import sync_folder_scan_task
 from tasks.scheduled.convert_images_to_webp import convert_images_to_webp_task
+from tasks.scheduled.metadata_watcher import metadata_watcher_task
 from tasks.scheduled.scan_library import scan_library_task
 from tasks.scheduled.update_launchbox_metadata import update_launchbox_metadata_task
 from tasks.scheduled.update_switch_titledb import update_switch_titledb_task
@@ -90,6 +91,13 @@ scheduled_tasks: list[ScheduledTask] = [
             "name": "convert_images_to_webp",
             "type": TaskType.CONVERSION,
             "task": convert_images_to_webp_task,
+        }
+    ),
+    ScheduledTask(
+        {
+            "name": "metadata_watcher",
+            "type": TaskType.WATCHER,
+            "task": metadata_watcher_task,
         }
     ),
 ]

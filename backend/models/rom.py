@@ -249,6 +249,9 @@ class Rom(BaseModel):
     ra_hash: Mapped[str | None] = mapped_column(String(length=100))
 
     missing_from_fs: Mapped[bool] = mapped_column(default=False, nullable=False)
+    metadata_checked_at: Mapped[datetime | None] = mapped_column(
+        TIMESTAMP(timezone=True), default=None
+    )
 
     platform_id: Mapped[int] = mapped_column(
         ForeignKey("platforms.id", ondelete="CASCADE")

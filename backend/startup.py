@@ -7,6 +7,7 @@ from opentelemetry import trace
 
 from config import (
     ENABLE_SCHEDULED_CONVERT_IMAGES_TO_WEBP,
+    ENABLE_SCHEDULED_METADATA_WATCHER,
     ENABLE_SCHEDULED_RESCAN,
     ENABLE_SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC,
     ENABLE_SCHEDULED_UPDATE_LAUNCHBOX_METADATA,
@@ -29,6 +30,7 @@ from models.firmware import FIRMWARE_FIXTURES_DIR, KNOWN_BIOS_KEY
 from tasks.scheduled.cleanup_netplay import cleanup_netplay_task
 from tasks.scheduled.cleanup_upload_tmp import cleanup_upload_tmp_task
 from tasks.scheduled.convert_images_to_webp import convert_images_to_webp_task
+from tasks.scheduled.metadata_watcher import metadata_watcher_task
 from tasks.scheduled.scan_library import scan_library_task
 from tasks.scheduled.sync_retroachievements_progress import (
     sync_retroachievements_progress_task,
@@ -69,6 +71,9 @@ async def main() -> None:
         if ENABLE_SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC:
             log.info("Starting scheduled RetroAchievements progress sync")
             sync_retroachievements_progress_task.init()
+        if ENABLE_SCHEDULED_METADATA_WATCHER:
+            log.info("Starting scheduled metadata watcher")
+            metadata_watcher_task.init()
         if ENABLE_SYNC_PUSH_PULL:
             log.info("Starting scheduled push-pull sync")
             sync_push_pull_task.init()
